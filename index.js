@@ -16,6 +16,44 @@ const getRawData = (URL) => {
 		});
 };
 
+app.get('/dfp', async function(req, res){
+	const url = 'https://beta-radiomitre-pre.cienradios.com.ar/politica/'
+	let fallo = false
+	let respuesta = {
+		sitio: url,
+		busca: 'categorias_politica',
+		estado: null,
+		respuesta: null
+	}
+	try {
+		const dataHtml = await getRawData(url)
+		const $ = cheerio.load(dataHtml)
+		//let add = $('div.dfpAd > div:nth-child(1)')}
+		let add = $('div.dfpAd')
+		let tit = $('div.categoryHeader > ol > li > a > b')
+		let cosa = $('div.categoryHeader > ol')
+		let add2 = $('/html/body/div[2]/div/header/div[1]/div[1]/div/div/div/div')
+		console.log($(add2).html())
+
+		let algo =$('#top > div.navBar.w-100.d-flex.flex-column.jc-end > div.navBarAd.d-flex.ai-center.jc-center.w-100')
+		console.log($(algo).html())
+		// console.log($(cosa).attr('class'))
+		// console.log($(cosa).html())
+		// console.log($(tit).text())
+		console.log($(add).attr('id'))
+		console.log($(add).html())
+	}catch(err){
+		fallo = true
+		console.log(err)
+	}finally{
+		if(!fallo){
+			res.status(200).send(respuesta)
+		} else {
+			res.status(500).send('Error')
+		}
+	}
+})
+
 app.get('/score', async function (req, res) {
 	const url = 'https://www.promiedos.com.ar/ficha=xjxjgktsqz'
 	let fallo = false
